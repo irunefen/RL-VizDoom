@@ -24,8 +24,8 @@ conda run -n vizdoom python corridor/train_corridor.py \
 # - Penalize excessive shooting
 conda run -n vizdoom python corridor/train_corridor.py \
   --algo ppo \
-  --total-timesteps 3000000 \
-  --n-envs 8 \
+  --total-timesteps 1000000 \
+  --n-envs 32 \
   --doom-skill 5 \
   --health-loss-penalty 1.0 \
   --shoot-penalty 0.01 \
@@ -45,4 +45,16 @@ conda run -n vizdoom tensorboard --logdir=runs/tb
 ```
 
 Then open in your browser: http://localhost:6006
+
+## Visualize trained agent
+
+```bash
+# View the best model playing 5 episodes
+conda run -n vizdoom python corridor/visualize_corridor.py \
+  --algo ppo \
+  --model-path runs/ppo_corridor/eval/best_model/best_model.zip \
+  --episodes 5 \
+  --deterministic
+
+```
 

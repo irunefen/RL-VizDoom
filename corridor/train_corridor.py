@@ -151,6 +151,11 @@ class CombatRewardShaping(gym.Wrapper):
             if self.min_kills > 0 and self._episode_kills < self.min_kills:
                 reward -= self.no_kill_finish_penalty
                 info["no_kill_finish_penalty"] = float(self.no_kill_finish_penalty)
+            
+            #Death penalty: if the agent died (terminated, not just timed out)
+            if terminated:
+                reward -= 800.0
+                info["death_penalty"] = 800.0
 
         return obs, reward, terminated, truncated, info
 
@@ -251,13 +256,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--n-envs", type=int, default=8)
     parser.add_argument("--seed", type=int, default=2)
     parser.add_argument("--doom-skill", type=int, default=5)
-    parser.add_argument("--health-loss-penalty", type=float, default=1.0, help="Penalty per health point lost")
-    parser.add_argument("--shoot-penalty", type=float, default=0.01, help="Per-step penalty when shooting")
+    parser.add_argument("--health-loss-penalty", type=float, default=3.0, help="Penalty per health point lost")
+    parser.add_argument("--shoot-penalty", type=float, default=0.1, help="Per-step penalty when shooting")
 
     #Combat shaping (enabled by default in the wrapper)
-    parser.add_argument("--kill-reward", type=float, default=5.0, help="Reward per kill")
+    parser.add_argument("--kill-reward", type=float, default=120.0, help="Reward per kill")
     parser.add_argument("--min-kills", type=int, default=1, help="Minimum kills per episode to avoid the end penalty")
-    parser.add_argument("--no-kill-finish-penalty", type=float, default=50.0, help="Penalty when finishing with < min-kills")
+    parser.add_argument("--no-kill-finish-penalty", type=float, default=450.0, help="Penalty when finishing with < min-kills")
 
     # DQN hyperparameters (ignored by PPO)
     parser.add_argument("--buffer-size", type=int, default=200_000)
