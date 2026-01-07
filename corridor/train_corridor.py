@@ -14,6 +14,7 @@ from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.vec_env import (DummyVecEnv,VecFrameStack,VecTransposeImage,)
 import cv2
+from vizdoom import GameVariable
 
 EnvBuilder = Callable[[], gym.Env]
 
@@ -103,8 +104,6 @@ class CombatRewardShaping(gym.Wrapper):
 
         self._game = getattr(env.unwrapped, "game", None)
         try:
-            from vizdoom import GameVariable
-
             self._kill_var = GameVariable.KILLCOUNT
         except Exception:
             self._kill_var = None
